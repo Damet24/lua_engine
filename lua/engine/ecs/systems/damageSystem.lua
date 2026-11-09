@@ -9,10 +9,13 @@ function DamageSystem.update(world)
 
 		health.value = health.value - damage.value
 		if health.value <= 0 then
+			world.events:emit("entity_died", {
+				entity = entity,
+			})
 			world:destroyEntity(entity)
 		end
 
-		word:removeComponent(entity, Components.PendingDamage)
+		world:removeComponent(entity, Components.PendingDamage)
 	end)
 end
 

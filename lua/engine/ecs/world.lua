@@ -1,3 +1,5 @@
+local EventManager = require("lua.engine.core.events")
+
 local World = {}
 World.__index = World
 
@@ -8,6 +10,8 @@ function World.new()
 	self.entities = {}
 	self.components = {}
 	self.systems = {}
+
+	self.events = EventManager.new()
 
 	return self
 end
@@ -103,6 +107,8 @@ function World:update(dt)
 	for _, system in ipairs(self.systems) do
 		system.update(self, dt)
 	end
+
+	self.events:dispatch()
 
 	self:flushDestroy()
 end
