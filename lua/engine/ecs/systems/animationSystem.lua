@@ -10,7 +10,7 @@ function AnimationSystem.update(world, dt)
 		local sprite = components.Sprite
 		local animation = components.Animation
 
-		local currentAnimation = sprite.animations[animation.current]
+		local currentAnimation = sprite.animations and sprite.animations[animation.current]
 
 		if not currentAnimation or not animation.playing then
 			return
