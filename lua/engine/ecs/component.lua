@@ -1,6 +1,7 @@
 local Components = {
 	Transform = "Transform",
 	Velocity = "Velocity",
+	Movement = "Movement",
 	Health = "Health",
 	Damage = "Damage",
 	Sprite = "Sprite",

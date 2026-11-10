@@ -2,13 +2,13 @@ local Components = require("lua.engine.ecs.component")
 
 local PhysicsSyncSystem = {}
 
-local PIXELS_PER_METER = 64
-
 function PhysicsSyncSystem.update(world)
-	world:query({
-
-	}, function(entity, components)
-		
+	world:query({ Components.Transform, Components.RigidBody }, function(entity, components)
+		local body = components.RigidBody.body
+		if body then
+			components.Transform.x, components.Transform.y = body:getPosition()
+			components.Transform.rotation = body:getAngle()
+		end
 	end)
 end
 

@@ -1,4 +1,6 @@
 local EventManager = require("lua.engine.core.events")
+local PhysicsWorld = require("lua.engine.physics.physics_world")
+local Components = require("lua.engine.ecs.component")
 
 local World = {}
 World.__index = World
@@ -13,7 +15,7 @@ function World.new(xg, yg, slepp)
 	self.pendingDestroy = {}
 
 	self.events = EventManager.new()
-	self.physics = love.physics.newWorld(xg or 0, yg or 0, slepp or false)
+	self.physics = PhysicsWorld.new(xg, yg, slepp)
 
 	return self
 end
@@ -35,6 +37,10 @@ end
 
 function World:flushDestroy()
 	for entity in pairs(self.pendingDestroy) do
+		local rigidBody = self:getComponent(entity, Components.RigidBody)
+		if rigidBody and rigidBody.body and not rigidBody.body:isDestroyed() then
+			rigidBody.body:destroy()
+		end
 		self.entities[entity] = nil
 
 		for _, storage in pairs(self.components) do
@@ -103,6 +109,9 @@ end
 
 function World:addSystem(system)
 	table.insert(self.systems, system)
+	if system.init then
+		system.init(self)
+	end
 end
 
 function World:update(dt)

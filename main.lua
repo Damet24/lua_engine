@@ -9,10 +9,17 @@ local RenderSystem = require("lua.engine.ecs.systems.renderSystem")
 local World = require("lua.engine.ecs.world")
 local Components = require("lua.engine.ecs.component")
 local MovementSystem = require("lua.engine.ecs.systems.movementSystem")
+local PhysicsMovementSystem = require("lua.engine.ecs.systems.physicsMovementSystem")
+local PhysicsSystem = require("lua.engine.ecs.systems.physicsSystem")
+local PhysicsSyncSystem = require("lua.engine.ecs.systems.physicsSyncSystem")
+local CollisionSystem = require("lua.engine.ecs.systems.collisionSystem")
+local PhysicsDebugSystem = require("lua.engine.ecs.systems.physicsDebugSystem")
+local PhysicsFactory = require("lua.engine.physics.physics_factory")
 local tilesets
 local tilemapRender
 local pipeline = RenderPipeline.new()
 local world
+local player
 
 function love.load()
 	love.window.setMode(SCREEN_WIDTH, SCREEN_HEIGHT, { vsync = true, fullscreen = false })
@@ -22,26 +29,62 @@ function love.load()
 	}
 	tilemapRender = TilemapRender.new(mapInfo, tilesets)
 
-	world = World.new()
+	world = World.new(0, 640, true)
 	world:addSystem(MovementSystem)
-	local player = world:createEntity()
+	world:addSystem(PhysicsMovementSystem)
+	world:addSystem(PhysicsSystem)
+	world:addSystem(PhysicsSyncSystem)
+	world:addSystem(CollisionSystem)
+	world.events:on("collision_started", function(contact)
+		print("collision_started", contact.entityA, contact.entityB)
+	end)
+	world.events:on("collision_ended", function(contact)
+		print("collision_ended", contact.entityA, contact.entityB)
+	end)
+
+	local ground = world:createEntity()
+	world:addComponent(ground, Components.Transform, { x = 152, y = 104 })
+	world:addComponent(ground, Components.RigidBody, { type = "static" })
+	world:addComponent(ground, Components.Collider, { shape = "rectangle", width = 304, height = 16 })
+	PhysicsFactory.create(world, ground)
+
 	local image = love.graphics.newImage("game/assets/images/Main Characters/Pink Man/Idle (32x32).png")
 	local frame = love.graphics.newQuad(0, 0, 32, 32, image:getDimensions())
-	world:addComponent(player, Components.Transform, { x = 160, y = 80 })
-	world:addComponent(player, Components.Velocity, { x = 160, y = 80 })
-	world:addComponent(player, Components.Sprite, {
-		image = image,
-		layer = 40,
-		animations = { idle = { image = image, frames = { frame } } },
-	})
-	world:addComponent(player, Components.Animation, { current = "idle", frame = 1 })
+	for index, position in ipairs({ { x = 80, y = 32 }, { x = 200, y = 16 } }) do
+		local entity = world:createEntity()
+		if index == 1 then
+			player = entity
+		end
+		world:addComponent(entity, Components.Transform, { x = position.x, y = position.y })
+		world:addComponent(entity, Components.Velocity, { x = index == 1 and 40 or 0, y = 0 })
+		world:addComponent(entity, Components.RigidBody, { type = "dynamic" })
+		world:addComponent(entity, Components.Collider, { shape = "rectangle", width = 32, height = 32 })
+		world:addComponent(entity, Components.Sprite, {
+			image = image,
+			layer = 40,
+			origin = { x = 16, y = 16 },
+			animations = { idle = { image = image, frames = { frame } } },
+		})
+		world:addComponent(entity, Components.Animation, { current = "idle", frame = 1 })
+		local body = PhysicsFactory.create(world, entity)
+		if entity == player then
+			body:setFixedRotation(true)
+		end
+	end
 end
 
-function love.update(dt) end
+function love.update(dt)
+	local body = world:getComponent(player, Components.RigidBody).body
+	local velocity = world:getComponent(player, Components.Velocity)
+	local _, velocityY = body:getLinearVelocity()
+	body:setLinearVelocity(velocity.x, velocityY)
+	world:update(dt)
+end
 
 function love.draw()
 	pipeline:clear()
 	tilemapRender:submit(pipeline)
 	RenderSystem.submit(world, pipeline)
 	pipeline:draw()
+	PhysicsDebugSystem.draw(world)
 end

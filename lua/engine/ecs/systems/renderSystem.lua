@@ -19,14 +19,14 @@ function RenderSystem.drawEntity(world, renderable)
 			frame,
 			transform.x,
 			transform.y,
-			0,
+			transform.rotation or 0,
 			1,
 			1,
 			origin.x or 0,
 			origin.y or 0
 		)
 	else
-		love.graphics.draw(sprite.image, transform.x, transform.y, 0, 1, 1, origin.x or 0, origin.y or 0)
+		love.graphics.draw(sprite.image, transform.x, transform.y, transform.rotation or 0, 1, 1, origin.x or 0, origin.y or 0)
 	end
 	love.graphics.pop()
 end
