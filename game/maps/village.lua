@@ -35,7 +35,7 @@ return {
 			offsety = 0,
 			parallaxx = 1,
 			parallaxy = 1,
-			properties = {},
+			properties = { layer = 10 },
 			encoding = "lua",
 			data = {
 				89,
@@ -655,7 +655,7 @@ return {
 			offsety = 0,
 			parallaxx = 1,
 			parallaxy = 1,
-			properties = {},
+			properties = { layer = 30 },
 			encoding = "lua",
 			data = {
 				0,
