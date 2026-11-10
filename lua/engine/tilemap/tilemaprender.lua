@@ -8,9 +8,7 @@ function TilemapRender.new(map, tilesets)
 	return self
 end
 
-function TilemapRender:render()
-	for _, layer in ipairs(self.map.layers) do
-		if layer.type == "tilelayer" and layer.visible ~= false then
+function TilemapRender:renderLayer(layer)
 			local layerWidth = layer.width or self.map.width
 			local layerHeight = layer.height or self.map.height
 			local offsetX = (layer.x or 0) * self.map.tilewidth + (layer.offsetx or 0)
@@ -49,6 +47,24 @@ function TilemapRender:render()
 			end
 
 			love.graphics.pop()
+
+end
+
+function TilemapRender:submit(pipeline)
+	for index, layer in ipairs(self.map.layers) do
+		if layer.type == "tilelayer" and layer.visible ~= false then
+			local renderLayer = layer.properties and layer.properties.layer
+			pipeline:add(renderLayer or index, function()
+				self:renderLayer(layer)
+			end)
+		end
+	end
+end
+
+function TilemapRender:render()
+	for _, layer in ipairs(self.map.layers) do
+		if layer.type == "tilelayer" and layer.visible ~= false then
+			self:renderLayer(layer)
 		end
 	end
 end
