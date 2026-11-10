@@ -10,6 +10,7 @@ function World.new()
 	self.entities = {}
 	self.components = {}
 	self.systems = {}
+	self.pendingDestroy = {}
 
 	self.events = EventManager.new()
 
@@ -105,12 +106,22 @@ end
 
 function World:update(dt)
 	for _, system in ipairs(self.systems) do
-		system.update(self, dt)
+		if system.update then
+			system.update(self, dt)
+		end
 	end
 
 	self.events:dispatch()
 
 	self:flushDestroy()
+end
+
+function World:draw()
+	for _, system in ipairs(self.systems) do
+		if system.draw then
+			system.draw(self, dt)
+		end
+	end
 end
 
 return World
