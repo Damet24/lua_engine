@@ -6,21 +6,22 @@ function RenderSystem.draw(world)
 	world:query({
 		Components.Transform,
 		Components.Sprite,
-		Components.Animation,
 	}, function(entity, components)
 		local transform = components.Transform
 		local sprite = components.Sprite
-		local animation = components.Animation
+		
 
-		local currentAnimation = sprite.animations[animation.current]
 
-		if not currentAnimation then
-			return
-		end
+		local origin = sprite.origin or {}
+		local originX = origin.x or 0
+		local originY = origin.y or 0
 
-		local current = sprite.animations[animation.current]
+		love.graphics.push()
 
-		love.graphics.draw(current.image, current.frames[animation.frame], transform.x, transform.y)
+		love.graphics.setColor(1, 1, 1, 1)
+		love.graphics.draw(sprite.image, transform.x, transform.y, 0 ,1, 1, originX, originY)
+
+		love.graphics.pop()
 	end)
 end
 

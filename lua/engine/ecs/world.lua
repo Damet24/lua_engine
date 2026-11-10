@@ -3,7 +3,7 @@ local EventManager = require("lua.engine.core.events")
 local World = {}
 World.__index = World
 
-function World.new()
+function World.new(xg, yg, slepp)
 	local self = setmetatable({}, World)
 
 	self.nextEntityId = 0
@@ -13,6 +13,7 @@ function World.new()
 	self.pendingDestroy = {}
 
 	self.events = EventManager.new()
+	self.physics = love.physics.newWorld(xg or 0, yg or 0, slepp or false)
 
 	return self
 end

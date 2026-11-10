@@ -8,6 +8,8 @@ local Components = {
 	RigidBody = "RigidBody",
 	Collider = "Collider",
 	Animation = "Animation",
+	Input = "Input",
+	Actions = "Actions",
 }
 
 return Components
