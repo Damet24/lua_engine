@@ -22,11 +22,18 @@ love = {
 
 local loader = {}
 function loader:load(sceneId, dependencies)
+	local context = {
+		sceneManager = dependencies.manager,
+		resourceManager = {
+			get = function(_, _, resourceId) assert(resourceId == "pause_font"); return font end,
+			releaseAll = function() end,
+		},
+	}
 	if sceneId == "pause" then
-		return Pause.new(dependencies)
+		return Pause.new(context)
 	end
 	assert(sceneId == "level")
-	local scene = Level01.new(dependencies)
+	local scene = Level01.new(context)
 	scene.player = 1
 	scene.world = {
 		getComponent = function(_, _, component)

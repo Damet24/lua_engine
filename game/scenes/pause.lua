@@ -7,25 +7,29 @@ setmetatable(Pause, {
 	__index = Scene,
 })
 
-function Pause.new(dependencies)
+function Pause.new(context)
 	local self = Scene.new()
 	setmetatable(self, Pause)
-	self.manager = dependencies.manager
+	self.context = context
 	self.drawBelow = true
 	self.escapeDown = true
 	return self
 end
 
 function Pause:onLoad()
-	self.font = love.graphics.newFont(36)
+	self.font = self.context.resourceManager:get(self, "pause_font")
 end
 
 function Pause:update(dt)
 	local escapeDown = love.keyboard.isDown("escape")
 	if escapeDown and not self.escapeDown then
-		self.manager:pop()
+		self.context.sceneManager:pop()
 	end
 	self.escapeDown = escapeDown
+end
+
+function Pause:onDestroy()
+	self.context.resourceManager:releaseAll(self)
 end
 
 function Pause:draw()

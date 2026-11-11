@@ -21,20 +21,21 @@ setmetatable(Level01, {
 	__index = Scene,
 })
 
-function Level01.new(dependencies)
+function Level01.new(context)
 	local self = Scene.new()
 
 	setmetatable(self, Level01)
 
-	self.manager = dependencies.manager
+	self.context = context
 
 	return self
 end
 
 function Level01:onLoad()
 
+	local resourceManager = self.context.resourceManager
 	local tilesets = {
-		["Terrain (16x16)"] = utils.loadQuads("game/assets/images/Terrain/Terrain (16x16).png", 16, 16),
+		["Terrain (16x16)"] = utils.loadQuads(resourceManager:get(self, "terrain"), 16, 16),
 	}
 	self.tilemapRender = TilemapRender.new(mapInfo, tilesets)
 	self.pipeline = RenderPipeline.new()
@@ -64,7 +65,7 @@ function Level01:onLoad()
 	world:addComponent(ground2, Components.Collider, { shape = "rectangle", width = 604, height = 16 })
 	PhysicsFactory.create(world, ground2)
 
-	local image = love.graphics.newImage("game/assets/images/Main Characters/Pink Man/Idle (32x32).png")
+	local image = resourceManager:get(self, "player_idle")
 	local frame = love.graphics.newQuad(0, 0, 32, 32, image:getDimensions())
 	for index, position in ipairs({ { x = 80, y = 32 }, { x = 200, y = 16 } }) do
 		local entity = world:createEntity()
@@ -92,7 +93,7 @@ end
 function Level01:update(dt)
 	local escapeDown = love.keyboard.isDown("escape")
 	if escapeDown and not self.escapeDown then
-		self.manager:push("pause")
+		self.context.sceneManager:push("pause")
 	end
 	self.escapeDown = escapeDown
 
@@ -101,6 +102,10 @@ function Level01:update(dt)
 	local _, velocityY = body:getLinearVelocity()
 	body:setLinearVelocity(assert(velocity.x), assert(velocityY))
 	self.world:update(dt)
+end
+
+function Level01:onDestroy()
+	self.context.resourceManager:releaseAll(self)
 end
 
 function Level01:draw()

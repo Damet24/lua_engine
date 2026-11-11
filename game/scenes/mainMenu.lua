@@ -4,12 +4,12 @@ local MainMenu = {}
 MainMenu.__index = MainMenu
 setmetatable(MainMenu, { __index = Scene })
 
-function MainMenu.new(dependencies)
+function MainMenu.new(context)
 	local self = Scene.new()
 
 	setmetatable(self, MainMenu)
 
-	self.manager = dependencies.manager
+	self.context = context
 
 	return self
 end
@@ -25,12 +25,16 @@ end
 function MainMenu:update(dt)
 	-- Actualizar el menú
 	if love.keyboard.isDown("return") then
-			self.manager:replace("levels.level01")
+			self.context.sceneManager:replace("levels.level01")
 	end
 
 	-- if love.keyboard.isDown("space") then
 	-- 		self.manager:pop()
 	-- end
+end
+
+function MainMenu:onDestroy()
+	self.context.resourceManager:releaseAll(self)
 end
 
 function MainMenu:draw()

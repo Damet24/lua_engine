@@ -3,13 +3,14 @@ local SceneLoader = {}
 SceneLoader.__index = SceneLoader
 
 function SceneLoader.new(config)
-	config = config or {}
+    config = config or {}
 
-	local self = setmetatable({}, SceneLoader)
+    local self = setmetatable({}, SceneLoader)
 
-	self.scenesPath = config.scenesPath or "game.scenes"
+    self.scenesPath = config.scenesPath or "game.scenes"
+    self.context = assert(config.context, "context is required")
 
-	return self
+    return self
 end
 
 function SceneLoader:load(sceneName, dependencies)
@@ -28,7 +29,7 @@ function SceneLoader:load(sceneName, dependencies)
 		("Scene '%s' must return a class with a .new() constructor"):format(sceneName)
 	)
 
-	return SceneClass.new(dependencies or {})
+	return SceneClass.new(self.context)
 end
 
 return SceneLoader

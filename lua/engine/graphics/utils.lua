@@ -1,5 +1,4 @@
-local function loadAnimation(path, frameWidth, frameHeight, frameDuration)
-	local image = love.graphics.newImage(path)
+local function loadAnimation(image, frameWidth, frameHeight, frameDuration)
 	local width, height = image:getDimensions()
 
 	local frames = {}
@@ -17,8 +16,7 @@ local function loadAnimation(path, frameWidth, frameHeight, frameDuration)
 	}
 end
 
-local function loadQuads(path, Width, Height)
-	local image = love.graphics.newImage(path)
+local function loadQuads(image, Width, Height)
 	local width, height = image:getDimensions()
 
 	local quads = {}
