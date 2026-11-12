@@ -22,6 +22,7 @@ package.loaded["engine.ecs.systems.collisionSystem"] = {}
 
 local map = require("game.maps.village")
 local Level01 = require("game.scenes.levels.level01")
+local Level = require("game.scenes.levels.level")
 local Components = require("engine.ecs.component")
 local image = { getDimensions = function() return 32, 32 end }
 local resources = { get = function() return image end }
@@ -50,6 +51,35 @@ for index, object in ipairs(walls.objects) do
 	assert(rigidBody.body.x == transform.x and rigidBody.body.y == transform.y)
 	assert(rigidBody.body.shape.width == collider.width and rigidBody.body.shape.height == collider.height)
 end
+
+local secondMap = {
+	width = 8, height = 8, tilewidth = 16, tileheight = 16,
+	tilesets = { { name = "Custom", firstgid = 1 } }, layers = {},
+}
+local requested = {}
+local released
+local secondResources = {
+	get = function(_, consumer, id) requested[id] = consumer; return image end,
+	releaseAll = function(_, consumer) released = consumer end,
+}
+local second = Level.new({ resourceManager = secondResources, viewport = {
+	getViewportDimensions = function() return 400, 300 end,
+} }, {
+	map = secondMap,
+	spawn = { x = 9, y = 11 },
+	tilesets = { Custom = { resource = "custom_terrain", tilewidth = 8, tileheight = 8 } },
+})
+second:onLoad()
+local secondTransform = assert(second.world:getComponent(second.player, Components.Transform))
+assert(second.map == secondMap and second.tilemapRender.map == secondMap)
+assert(secondTransform.x == 9 and secondTransform.y == 11)
+assert(second.tilemapRender.tilesets.Custom.quads[1][3] == 8 and second.tilemapRender.tilesets.Custom.quads[1][4] == 8)
+assert(requested.custom_terrain == second and not requested.terrain)
+assert(second.world ~= level.world and second.cameraManager ~= level.cameraManager)
+local secondX, secondY = second.cameraManager:getActive():getPosition()
+assert(secondX == 64 and secondY == 64)
+second:onDestroy()
+assert(released == second and second.cameraManager == nil and level.cameraManager:getActive())
 
 -- Tiled rotates rectangles around their top-left corner, not their center.
 walls.x, walls.y, walls.offsetx, walls.offsety = 1, 2, 3, 4

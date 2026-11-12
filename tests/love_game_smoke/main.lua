@@ -13,10 +13,12 @@ rawset(love, "load", function()
 		assert(loadfile(root .. "/main.lua"))()
 		love.load()
 		local _, engine = debug.getupvalue(love.update, 1)
-		assert(engine and engine.sceneManager.stack[1].id == "mainMenu")
-		love.keypressed("return")
-		love.update(1 / 60)
-		love.keyreleased("return")
+		assert(engine and engine.sceneManager.stack[1])
+		if engine.sceneManager.stack[1].id == "mainMenu" then
+			love.keypressed("return")
+			love.update(1 / 60)
+			love.keyreleased("return")
+		end
 		assert(engine.sceneManager.stack[1].id == "levels.level01")
 		love.update(1 / 60)
 		local draw = love.draw

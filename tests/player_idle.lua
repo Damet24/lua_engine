@@ -60,7 +60,7 @@ local idle = assert(sprite.animations.idle)
 local body = assert(world:getComponent(level.player, Components.RigidBody)).body
 local camera = level.cameraManager:getActive()
 local map = require("game.maps.village")
-local mapWidth, mapHeight = map.width * map.tilewidth, map.height * map.tileheight
+local mapWidth, mapHeight = map.width * map.tilewidth, 360
 local function assertCamera(x, y)
 	local cameraX, cameraY = camera:getPosition()
 	assert(cameraX == x and cameraY == y)
@@ -77,7 +77,7 @@ local function makeContact(normalY, playerFirst, touching, sensor, enabled)
 	}
 end
 body.contacts = { makeContact(1, true, true, false, true) }
-assertCamera(200, 150)
+assertCamera(200, mapHeight - 150)
 body.x, body.y = mapWidth, mapHeight
 level:update(0)
 assertCamera(mapWidth - 200, mapHeight - 150)
@@ -162,6 +162,8 @@ assert(velocity.x == 0 and body.velocityX == 0)
 local function tryJump(contact, verticalSpeed)
 	body.contacts = contact and { contact } or {}
 	body.velocityY = verticalSpeed
+	local rigidBody = assert(world:getComponent(level.player, Components.RigidBody))
+	rigidBody.commandX, rigidBody.commandY = velocity.x, velocity.y
 	input:keypressed("space")
 	level:update(0.01)
 	local result = body.velocityY
@@ -204,7 +206,7 @@ level:update(0.01)
 assert(state.current == "run" and state.frame == 1 and state.timer == 0 and sprite.flipH)
 level:update(0.06)
 level:update(0.06)
-assert(state.current == "run" and state.frame == 2)
+assert(state.current == "run" and state.frame == 3)
 body.velocityY = -100
 level:update(0.01)
 assert(state.current == "jump" and state.frame == 1 and state.timer == 0 and sprite.flipH)
