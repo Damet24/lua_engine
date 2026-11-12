@@ -16,9 +16,10 @@ function AnimationSystem.update(world, dt)
 			return
 		end
 
+		assert(type(currentAnimation.frameDuration) == "number" and currentAnimation.frameDuration > 0, "frameDuration must be positive")
 		animation.timer = animation.timer + dt
 
-		if animation.timer >= currentAnimation.frameDuration then
+		while animation.playing and animation.timer >= currentAnimation.frameDuration do
 			animation.timer = animation.timer - currentAnimation.frameDuration
 
 			animation.frame = animation.frame + 1

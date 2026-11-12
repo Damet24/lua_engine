@@ -1,6 +1,9 @@
 local Engine = require("lua.engine.engine")
 
 local calls = {}
+package.loaded["lua.lib.shove.shove"] = {
+	setResolution = function() end,
+}
 love = {
 	window = {
 		setMode = function(width, height, flags)
