@@ -2,11 +2,13 @@ local Engine = require("lua.engine.engine")
 
 local resourcesDefinitions = require("game.resources.definitions")
 local resourcesLoaders = require("game.resources.loaders")
+local inputMaps = require("game.inputMaps")
 
 local engine = Engine.new({
 	initialScene = "mainMenu",
 	resourceDefinitions = resourcesDefinitions,
 	resourceLoaders = resourcesLoaders,
+	inputMaps = inputMaps,
 	window = {
 		width = 1280,
 		height = 720,
@@ -32,4 +34,12 @@ end
 
 function love.draw()
 	engine:draw()
+end
+
+function love.keypressed(key)
+	engine:keypressed(key)
+end
+
+function love.keyreleased(key)
+	engine:keyreleased(key)
 end

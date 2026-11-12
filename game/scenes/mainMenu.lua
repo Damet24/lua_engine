@@ -25,8 +25,8 @@ end
 
 function MainMenu:update(dt)
 	-- Actualizar el menú
-	if love.keyboard.isDown("return") then
-			self.context.sceneManager:replace("levels.level01")
+	if self.context.inputManager:isJustPressed("accept") then
+		self.context.sceneManager:replace("levels.level01")
 	end
 
 	-- if love.keyboard.isDown("space") then

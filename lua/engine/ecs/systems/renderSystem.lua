@@ -10,6 +10,8 @@ function RenderSystem.drawEntity(world, renderable)
 	local currentAnimation = animation and sprite.animations and sprite.animations[animation.current]
 	local frame = currentAnimation and currentAnimation.frames[animation.frame]
 	local origin = sprite.origin or {}
+	local scaleX = sprite.flipH and -1 or 1
+	local scaleY = sprite.flipV and -1 or 1
 
 	love.graphics.push("all")
 	love.graphics.setColor(1, 1, 1, 1)
@@ -20,13 +22,13 @@ function RenderSystem.drawEntity(world, renderable)
 			transform.x,
 			transform.y,
 			transform.rotation or 0,
-			1,
-			1,
+			scaleX,
+			scaleY,
 			origin.x or 0,
 			origin.y or 0
 		)
 	else
-		love.graphics.draw(sprite.image, transform.x, transform.y, transform.rotation or 0, 1, 1, origin.x or 0, origin.y or 0)
+		love.graphics.draw(sprite.image, transform.x, transform.y, transform.rotation or 0, scaleX, scaleY, origin.x or 0, origin.y or 0)
 	end
 	love.graphics.pop()
 end

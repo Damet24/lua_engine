@@ -15,6 +15,24 @@ local CollisionSystem = require("lua.engine.ecs.systems.collisionSystem")
 local PhysicsDebugSystem = require("lua.engine.ecs.systems.physicsDebugSystem")
 local PhysicsFactory = require("lua.engine.physics.physics_factory")
 
+local PLAYER_SPEED = 100
+local JUMP_SPEED = 300
+
+local function isGrounded(body)
+	for _, contact in ipairs(body:getContacts()) do
+		if contact:isTouching() and contact:isEnabled() then
+			local first, second = contact:getFixtures()
+			if not first:isSensor() and not second:isSensor() then
+				local _, normalY = contact:getNormal()
+				if (first:getBody() == body and normalY > 0.5) or (second:getBody() == body and normalY < -0.5) then
+					return true
+				end
+			end
+		end
+	end
+	return false
+end
+
 local Level01 = {}
 Level01.__index = Level01
 
@@ -54,59 +72,102 @@ function Level01:onLoad()
 		print("collision_ended", contact.entityA, contact.entityB)
 	end)
 
-	local ground = world:createEntity()
-	world:addComponent(ground, Components.Transform, { x = 152, y = 104 })
-	world:addComponent(ground, Components.RigidBody, { type = "static" })
-	world:addComponent(ground, Components.Collider, { shape = "rectangle", width = 304, height = 16 })
-	PhysicsFactory.create(world, ground)
-
-	local ground2 = world:createEntity()
-	world:addComponent(ground2, Components.Transform, { x = 152, y = 304 })
-	world:addComponent(ground2, Components.RigidBody, { type = "static" })
-	world:addComponent(ground2, Components.Collider, { shape = "rectangle", width = 604, height = 16 })
-	PhysicsFactory.create(world, ground2)
-
-	local image = resourceManager:get(self, "player_idle")
-	local animation = utils.loadAnimation(image, 32, 32, 0.1)
-	for index, position in ipairs({ { x = 80, y = 32 }, { x = 200, y = 16 } }) do
-		local entity = world:createEntity()
-		if index == 1 then
-			self.player = entity
-		end
-		world:addComponent(entity, Components.Transform, { x = position.x, y = position.y })
-		world:addComponent(entity, Components.Velocity, { x = index == 1 and 40 or 0, y = 0 })
-		world:addComponent(entity, Components.RigidBody, { type = "dynamic" })
-		world:addComponent(entity, Components.Collider, { shape = "rectangle", width = 32, height = 32 })
-		world:addComponent(entity, Components.Sprite, {
-			image = image,
-			layer = 40,
-			origin = { x = 16, y = 16 },
-			animations = { idle = animation },
-		})
-		world:addComponent(
-			entity,
-			Components.Animation,
-			{ current = "idle", frame = 1, timer = 0, playing = true, loop = true }
-		)
-		local body = PhysicsFactory.create(world, entity)
-		if entity == self.player then
-			body:setFixedRotation(true)
+	for _, layer in ipairs(mapInfo.layers) do
+		if layer.type == "objectgroup" and layer.name == "walls" then
+			local offsetX = (layer.x or 0) * mapInfo.tilewidth + (layer.offsetx or 0)
+			local offsetY = (layer.y or 0) * mapInfo.tileheight + (layer.offsety or 0)
+			for _, object in ipairs(layer.objects) do
+				assert(object.shape == "rectangle", "walls must contain only rectangles")
+				local rotation = math.rad(object.rotation or 0)
+				local cos, sin = math.cos(rotation), math.sin(rotation)
+				local entity = world:createEntity()
+				world:addComponent(entity, Components.Transform, {
+					x = offsetX + object.x + cos * object.width / 2 - sin * object.height / 2,
+					y = offsetY + object.y + sin * object.width / 2 + cos * object.height / 2,
+					rotation = rotation,
+				})
+				world:addComponent(entity, Components.RigidBody, { type = "static" })
+				world:addComponent(entity, Components.Collider, {
+					shape = "rectangle",
+					width = object.width,
+					height = object.height,
+				})
+				PhysicsFactory.create(world, entity)
+			end
 		end
 	end
+
+	local image = resourceManager:get(self, "player_idle")
+	local animations = {
+		idle = utils.loadAnimation(image, 32, 32, 0.1),
+		run = utils.loadAnimation(resourceManager:get(self, "player_run"), 32, 32, 0.1),
+		jump = utils.loadAnimation(resourceManager:get(self, "player_jump"), 32, 32, 0.1),
+		fall = utils.loadAnimation(resourceManager:get(self, "player_fall"), 32, 32, 0.1),
+	}
+	local entity = world:createEntity()
+	self.player = entity
+	world:addComponent(entity, Components.Transform, { x = 80, y = 32 })
+	world:addComponent(entity, Components.Velocity, { x = 0, y = 0 })
+	world:addComponent(entity, Components.RigidBody, { type = "dynamic" })
+	world:addComponent(entity, Components.Collider, { shape = "rectangle", width = 18, height = 28 })
+	world:addComponent(entity, Components.Sprite, {
+		image = image,
+		layer = 40,
+		origin = { x = 16, y = 16 },
+		flipH = false,
+		animations = animations,
+	})
+	world:addComponent(
+		entity,
+		Components.Animation,
+		{ current = "idle", frame = 1, timer = 0, playing = true, loop = true }
+	)
+	local body, fixture = PhysicsFactory.create(world, entity)
+	fixture:setFriction(0)
+	body:setFixedRotation(true)
 end
 
 function Level01:update(dt)
-	local escapeDown = love.keyboard.isDown("escape")
-	if escapeDown and not self.escapeDown then
+	if self.context.inputManager:isJustPressed("exit") then
 		self.context.sceneManager:push("pause")
 	end
-	self.escapeDown = escapeDown
 
 	local body = assert(self.world:getComponent(self.player, Components.RigidBody)).body
 	local velocity = assert(self.world:getComponent(self.player, Components.Velocity))
+	local input = self.context.inputManager
+	local direction = (input:isDown("move_right") and 1 or 0) - (input:isDown("move_left") and 1 or 0)
+	if direction ~= 0 then
+		local sprite = assert(self.world:getComponent(self.player, Components.Sprite))
+		sprite.flipH = direction < 0
+	end
 	local _, velocityY = body:getLinearVelocity()
-	body:setLinearVelocity(assert(velocity.x), assert(velocityY))
+	if input:isJustPressed("jump") and velocityY >= 0 and isGrounded(body) then
+		velocityY = -JUMP_SPEED
+	end
+	velocity.x, velocity.y = direction * PLAYER_SPEED, velocityY
+	body:setLinearVelocity(velocity.x, velocity.y)
 	self.world:update(dt)
+
+	local velocityX, currentVelocityY = body:getLinearVelocity()
+	local animationName
+	if currentVelocityY < -1 then
+		animationName = "jump"
+	elseif not isGrounded(body) then
+		animationName = "fall"
+	elseif math.abs(velocityX) > 1 then
+		animationName = "run"
+	else
+		animationName = "idle"
+	end
+
+	local animation = assert(self.world:getComponent(self.player, Components.Animation))
+	if animation.current ~= animationName then
+		animation.current = animationName
+		animation.frame = 1
+		animation.timer = 0
+		animation.playing = true
+		animation.loop = true
+	end
 end
 
 function Level01:onDestroy()

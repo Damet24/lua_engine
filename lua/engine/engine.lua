@@ -2,6 +2,7 @@ local ResourceManager = require("lua.engine.resources.resourceManager")
 local GameContext = require("lua.engine.gameContext")
 local SceneLoader = require("lua.engine.scene.sceneLoader")
 local SceneManager = require("lua.engine.scene.sceneManager")
+local InputManager = require("lua.engine.input.inputManager")
 
 local Engine = {}
 Engine.__index = Engine
@@ -115,7 +116,10 @@ function Engine.new(config)
 
 	self.sceneManager = SceneManager.new(self.sceneLoader)
 
+	self.inputManager = InputManager.new(config.inputMaps)
+
 	self.context.sceneManager = self.sceneManager
+	self.context.inputManager = self.inputManager
 
 	self.loaded = false
 	self.closed = false
@@ -157,6 +161,7 @@ function Engine:update(dt)
 	end
 
 	self.sceneManager:update(dt)
+	self.inputManager:update()
 end
 
 function Engine:draw()
@@ -180,6 +185,14 @@ function Engine:quit()
 	self.resourceManager:releaseAllResources()
 
 	self.closed = true
+end
+
+function Engine:keypressed(key)
+	self.inputManager:keypressed(key)
+end
+
+function Engine:keyreleased(key)
+	self.inputManager:keyreleased(key)
 end
 
 return Engine

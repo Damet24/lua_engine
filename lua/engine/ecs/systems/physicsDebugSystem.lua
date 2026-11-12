@@ -2,7 +2,7 @@ local PhysicsDebugSystem = {}
 
 function PhysicsDebugSystem.draw(world)
 	love.graphics.push("all")
-	love.graphics.setColor(0, 1, 0, 1)
+	love.graphics.setColor(0, 1, 0, 0.5)
 	for _, body in ipairs(world.physics:getBodies()) do
 		for _, fixture in ipairs(body:getFixtures()) do
 			local shape = fixture:getShape()

@@ -30,7 +30,7 @@
             "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 266.33333333333337,
+                "x": 266.66666666666663,
                 "y": 123.66666666666663
             }
         },
@@ -38,11 +38,11 @@
             "scaleInDock": 1
         },
         "tiled/maps/vIllage.tmx": {
-            "scale": 2.3453125,
-            "selectedLayer": 0,
+            "scale": 1,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 239.84010659560292,
-                "y": 160.10659560293135
+                "x": 252,
+                "y": 218.5
             }
         },
         "tiled/maps/vallage.tmx": {

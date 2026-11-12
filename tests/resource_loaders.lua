@@ -22,16 +22,22 @@ love = {
 
 local manager = ResourceManager.new(definitions, loaders)
 local consumer = {}
-for _, resourceId in ipairs({ "terrain", "player_idle" }) do
+local resourceIds = {
+	"terrain", "player_idle", "player_run", "player_jump", "player_double_jump",
+	"player_fall", "player_wall_jump", "player_hit",
+}
+for _, resourceId in ipairs(resourceIds) do
+	local file = assert(io.open(definitions[resourceId].path, "rb"))
+	file:close()
 	local image = manager:get(consumer, resourceId)
 	assert(image.path == definitions[resourceId].path)
 	assert(manager:get(consumer, resourceId) == image)
 end
-assert(#images == 2)
+assert(#images == #resourceIds)
 local font = manager:get(consumer, "pause_font")
 assert(font.size == definitions.pause_font.size)
 manager:releaseAll(consumer)
-assert(images[1].released and images[2].released)
+for _, image in ipairs(images) do assert(image.released) end
 assert(font.released)
 assert(next(manager.resources) == nil)
 
