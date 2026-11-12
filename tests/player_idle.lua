@@ -46,7 +46,9 @@ local Components = require("lua.engine.ecs.component")
 local RenderSystem = require("lua.engine.ecs.systems.renderSystem")
 local InputManager = require("lua.engine.input.inputManager")
 local input = InputManager.new(require("game.inputMaps"))
-local level = Level01.new({ resourceManager = resources, inputManager = input })
+local level = Level01.new({ resourceManager = resources, inputManager = input, viewport = {
+	getViewportDimensions = function() return 400, 300 end,
+} })
 level:onLoad()
 
 local world = level.world

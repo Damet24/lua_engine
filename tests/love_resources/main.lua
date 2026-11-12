@@ -15,6 +15,8 @@ rawset(love, "run", function()
 	local SceneManager = require("lua.engine.scene.sceneManager")
 	local resources = ResourceManager.new(require("game.resources.definitions"), require("game.resources.loaders"))
 	local context = GameContext.new({ resourceManager = resources })
+	context.viewport = { getViewportDimensions = function() return 400, 300 end }
+	context.inputManager = { isDown = function() return false end, isJustPressed = function() return false end }
 	local manager = SceneManager.new(SceneLoader.new({ context = context }))
 	context.sceneManager = manager
 

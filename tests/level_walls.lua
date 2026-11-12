@@ -26,7 +26,9 @@ local Components = require("lua.engine.ecs.component")
 local image = { getDimensions = function() return 32, 32 end }
 local resources = { get = function() return image end }
 local function loadLevel()
-	local level = Level01.new({ resourceManager = resources })
+	local level = Level01.new({ resourceManager = resources, viewport = {
+		getViewportDimensions = function() return 400, 300 end,
+	} })
 	level:onLoad()
 	return level
 end

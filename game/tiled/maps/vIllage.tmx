@@ -35,7 +35,7 @@
 </data>
  </layer>
  <objectgroup id="3" name="walls">
-  <object id="10" x="-80" y="336" width="1008" height="32"/>
+  <object id="10" x="0" y="336" width="928" height="32"/>
  </objectgroup>
  <layer id="1" name="main" width="58" height="23">
   <properties>

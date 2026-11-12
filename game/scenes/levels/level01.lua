@@ -3,6 +3,7 @@ local mapInfo = require("game.maps.village")
 local utils = require("lua.engine.graphics.utils")
 local TilemapRender = require("lua.engine.tilemap.tilemaprender")
 local RenderPipeline = require("lua.engine.graphics.render_pipeline")
+local CameraManager = require("lua.engine.camera.cameraManager")
 local RenderSystem = require("lua.engine.ecs.systems.renderSystem")
 local AnimationSystem = require("lua.engine.ecs.systems.animationSystem")
 local World = require("lua.engine.ecs.world")
@@ -52,6 +53,13 @@ end
 
 function Level01:onLoad()
 	local resourceManager = self.context.resourceManager
+	local width, height = self.context.viewport.getViewportDimensions()
+	self.cameraManager = CameraManager.new()
+	self.cameraManager:add("gameplay", {
+		x = width / 2, y = height / 2,
+		viewport = { width = width, height = height },
+	})
+	self.cameraManager:setActive("gameplay")
 	local tilesets = {
 		["Terrain (16x16)"] = utils.loadQuads(resourceManager:get(self, "terrain"), 16, 16),
 	}
@@ -148,6 +156,8 @@ function Level01:update(dt)
 	body:setLinearVelocity(velocity.x, velocity.y)
 	self.world:update(dt)
 
+	self.cameraManager:getActive():setPosition(body:getPosition())
+
 	local velocityX, currentVelocityY = body:getLinearVelocity()
 	local animationName
 	if currentVelocityY < -1 then
@@ -171,6 +181,7 @@ function Level01:update(dt)
 end
 
 function Level01:onDestroy()
+	self.cameraManager = nil
 	self.context.resourceManager:releaseAll(self)
 end
 
@@ -178,8 +189,10 @@ function Level01:draw()
 	self.pipeline:clear()
 	self.tilemapRender:submit(self.pipeline)
 	RenderSystem.submit(self.world, self.pipeline)
-	self.pipeline:draw()
-	PhysicsDebugSystem.draw(self.world)
+	self.cameraManager:getActive():draw(function()
+		self.pipeline:draw()
+		PhysicsDebugSystem.draw(self.world)
+	end)
 end
 
 return Level01
