@@ -64,4 +64,10 @@ function ResourceManager:releaseAll(consumer)
     end
 end
 
+function ResourceManager:releaseAllResources()
+    for resourceId in pairs(self.resources) do
+        self:releaseResource(resourceId)
+    end
+end
+
 return ResourceManager

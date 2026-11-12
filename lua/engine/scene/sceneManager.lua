@@ -47,6 +47,8 @@ function SceneManager:processPendingOperations()
 				operation.sceneId,
 				operation.dependencies
 			)
+        elseif operation.type == "clear" then
+            self:applyClear()
 		elseif operation.type == "clearAndPush" then
 			self:applyClearAndPush(
 				operation.sceneId,
@@ -137,6 +139,24 @@ function SceneManager:applyClearAndPush(sceneId, dependencies)
 	}
 
 	newScene:onEnter()
+end
+
+function SceneManager:clear()
+    table.insert(self.pendingOperations, { type = "clear" })
+end
+
+function SceneManager:applyClear()
+    local stack = self.stack
+    self.stack = {}
+
+    local current = stack[#stack]
+    if current then
+        current.scene:onExit()
+    end
+
+    for i = #stack, 1, -1 do
+        stack[i].scene:onDestroy()
+    end
 end
 
 function SceneManager:clearAndPush(sceneId, dependencies)

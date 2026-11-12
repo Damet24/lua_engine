@@ -59,6 +59,21 @@ assert(not success and type(message) == "string" and message:find("Resource 'mis
 assert(manager.resources.missing == nil)
 assert(loadCount == 2)
 
+manager.definitions.other = definition
+local shared = manager:get(firstConsumer, "player")
+assert(manager:get(secondConsumer, "player") == shared)
+local other = manager:get(secondConsumer, "other")
+manager:releaseAllResources()
+assert(next(manager.resources) == nil and releaseCount == 4)
+assert((released[3] == shared and released[4] == other)
+	or (released[3] == other and released[4] == shared))
+manager:releaseAllResources()
+assert(releaseCount == 4)
+local afterClear = manager:get(firstConsumer, "player")
+assert(afterClear ~= shared and loadCount == 5)
+manager:releaseAllResources()
+assert(next(manager.resources) == nil and releaseCount == 5)
+
 local missingLoaderManager = ResourceManager.new({ music = { type = "audio" } }, {})
 success, message = pcall(function()
 	missingLoaderManager:get(firstConsumer, "music")

@@ -129,7 +129,7 @@ end
 function World:draw()
 	for _, system in ipairs(self.systems) do
 		if system.draw then
-			system.draw(self, dt)
+			system.draw(self)
 		end
 	end
 end

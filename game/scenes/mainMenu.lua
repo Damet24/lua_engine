@@ -16,6 +16,7 @@ end
 
 function MainMenu:onLoad()
 	print("Loading MainMenu")
+	self.context.resourceManager:get(self, "terrain")
 end
 
 function MainMenu:onEnter()
