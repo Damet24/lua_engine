@@ -4,6 +4,7 @@ local utils = require("lua.engine.graphics.utils")
 local TilemapRender = require("lua.engine.tilemap.tilemaprender")
 local RenderPipeline = require("lua.engine.graphics.render_pipeline")
 local RenderSystem = require("lua.engine.ecs.systems.renderSystem")
+local AnimationSystem = require("lua.engine.ecs.systems.animationSystem")
 local World = require("lua.engine.ecs.world")
 local Components = require("lua.engine.ecs.component")
 local MovementSystem = require("lua.engine.ecs.systems.movementSystem")
@@ -32,7 +33,6 @@ function Level01.new(context)
 end
 
 function Level01:onLoad()
-
 	local resourceManager = self.context.resourceManager
 	local tilesets = {
 		["Terrain (16x16)"] = utils.loadQuads(resourceManager:get(self, "terrain"), 16, 16),
@@ -41,6 +41,7 @@ function Level01:onLoad()
 	self.pipeline = RenderPipeline.new()
 	self.world = World.new(0, 640, true)
 	local world = self.world
+	world:addSystem(AnimationSystem)
 	world:addSystem(MovementSystem)
 	world:addSystem(PhysicsMovementSystem)
 	world:addSystem(PhysicsSystem)
@@ -66,7 +67,7 @@ function Level01:onLoad()
 	PhysicsFactory.create(world, ground2)
 
 	local image = resourceManager:get(self, "player_idle")
-	local frame = love.graphics.newQuad(0, 0, 32, 32, image:getDimensions())
+	local animation = utils.loadAnimation(image, 32, 32, 0.1)
 	for index, position in ipairs({ { x = 80, y = 32 }, { x = 200, y = 16 } }) do
 		local entity = world:createEntity()
 		if index == 1 then
@@ -80,9 +81,13 @@ function Level01:onLoad()
 			image = image,
 			layer = 40,
 			origin = { x = 16, y = 16 },
-			animations = { idle = { image = image, frames = { frame } } },
+			animations = { idle = animation },
 		})
-		world:addComponent(entity, Components.Animation, { current = "idle", frame = 1 })
+		world:addComponent(
+			entity,
+			Components.Animation,
+			{ current = "idle", frame = 1, timer = 0, playing = true, loop = true }
+		)
 		local body = PhysicsFactory.create(world, entity)
 		if entity == self.player then
 			body:setFixedRotation(true)

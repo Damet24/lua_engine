@@ -9,6 +9,7 @@ return {
 	},
 	pause_font = {
 		type = "font",
-		size = 36,
+		size = 18,
 	},
 }
+

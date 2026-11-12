@@ -33,7 +33,7 @@ function Pause:onDestroy()
 end
 
 function Pause:draw()
-	local width, height = love.graphics.getDimensions()
+	local width, height = self.context.viewport.getViewportDimensions()
 	love.graphics.push("all")
 	love.graphics.setColor(0, 0, 0, 0.6)
 	love.graphics.rectangle("fill", 0, 0, width, height)
