@@ -12,18 +12,20 @@ love = {
 	keyboard = { isDown = function() return false end },
 }
 
-package.loaded["lua.engine.physics.physics_world"] = { new = function() return {} end }
+package.loaded["engine.physics.physics_world"] = { new = function() return {} end }
 for _, name in ipairs({ "physicsSystem", "physicsSyncSystem", "collisionSystem" }) do
-	package.loaded["lua.engine.ecs.systems." .. name] = {}
+	package.loaded["engine.ecs.systems." .. name] = {}
 end
-package.loaded["lua.engine.physics.physics_factory"] = {
+package.loaded["engine.physics.physics_factory"] = {
 	create = function(world, entity)
 		local body = {
 			velocityX = 0, velocityY = 0,
+			x = 80, y = 32,
 			contacts = {},
 			setFixedRotation = function() end,
 			getType = function() return world:getComponent(entity, "RigidBody").type end,
 			getContacts = function(self) return self.contacts end,
+			getPosition = function(self) return self.x, self.y end,
 			getLinearVelocity = function(self) return self.velocityX, self.velocityY end,
 			setLinearVelocity = function(self, x, y) self.velocityX, self.velocityY = x, y end,
 		}
@@ -42,9 +44,9 @@ local images = {
 }
 local resources = { get = function(_, _, id) return images[id] or terrain end }
 local Level01 = require("game.scenes.levels.level01")
-local Components = require("lua.engine.ecs.component")
-local RenderSystem = require("lua.engine.ecs.systems.renderSystem")
-local InputManager = require("lua.engine.input.inputManager")
+local Components = require("engine.ecs.component")
+local RenderSystem = require("engine.ecs.systems.renderSystem")
+local InputManager = require("engine.input.inputManager")
 local input = InputManager.new(require("game.inputMaps"))
 local level = Level01.new({ resourceManager = resources, inputManager = input, viewport = {
 	getViewportDimensions = function() return 400, 300 end,
@@ -56,6 +58,13 @@ local sprite = assert(world:getComponent(level.player, Components.Sprite))
 local state = assert(world:getComponent(level.player, Components.Animation))
 local idle = assert(sprite.animations.idle)
 local body = assert(world:getComponent(level.player, Components.RigidBody)).body
+local camera = level.cameraManager:getActive()
+local map = require("game.maps.village")
+local mapWidth, mapHeight = map.width * map.tilewidth, map.height * map.tileheight
+local function assertCamera(x, y)
+	local cameraX, cameraY = camera:getPosition()
+	assert(cameraX == x and cameraY == y)
+end
 local playerFixture = { getBody = function() return body end, isSensor = function() return false end }
 local otherFixture = { getBody = function() return {} end, isSensor = function() return false end }
 local function makeContact(normalY, playerFirst, touching, sensor, enabled)
@@ -68,6 +77,22 @@ local function makeContact(normalY, playerFirst, touching, sensor, enabled)
 	}
 end
 body.contacts = { makeContact(1, true, true, false, true) }
+assertCamera(200, 150)
+body.x, body.y = mapWidth, mapHeight
+level:update(0)
+assertCamera(mapWidth - 200, mapHeight - 150)
+body.x, body.y = mapWidth / 2, mapHeight / 2
+level:update(0)
+assertCamera(mapWidth / 2, mapHeight / 2)
+camera:setZoom(2)
+body.x, body.y = 0, 0
+level:update(0)
+assertCamera(100, 75)
+camera:setZoom(0.1)
+level:update(0)
+assertCamera(mapWidth / 2, mapHeight / 2)
+camera:setZoom(1)
+body.x, body.y = 80, 32
 local spriteCount = 0
 world:query({ Components.Sprite }, function() spriteCount = spriteCount + 1 end)
 assert(spriteCount == 1)

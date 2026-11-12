@@ -1,23 +1,39 @@
-local Scene = require("lua.engine.scene.scene")
+local Scene = require("engine.scene.scene")
 local mapInfo = require("game.maps.village")
-local utils = require("lua.engine.graphics.utils")
-local TilemapRender = require("lua.engine.tilemap.tilemaprender")
-local RenderPipeline = require("lua.engine.graphics.render_pipeline")
-local CameraManager = require("lua.engine.camera.cameraManager")
-local RenderSystem = require("lua.engine.ecs.systems.renderSystem")
-local AnimationSystem = require("lua.engine.ecs.systems.animationSystem")
-local World = require("lua.engine.ecs.world")
-local Components = require("lua.engine.ecs.component")
-local MovementSystem = require("lua.engine.ecs.systems.movementSystem")
-local PhysicsMovementSystem = require("lua.engine.ecs.systems.physicsMovementSystem")
-local PhysicsSystem = require("lua.engine.ecs.systems.physicsSystem")
-local PhysicsSyncSystem = require("lua.engine.ecs.systems.physicsSyncSystem")
-local CollisionSystem = require("lua.engine.ecs.systems.collisionSystem")
-local PhysicsDebugSystem = require("lua.engine.ecs.systems.physicsDebugSystem")
-local PhysicsFactory = require("lua.engine.physics.physics_factory")
+local utils = require("engine.graphics.utils")
+local TilemapRender = require("engine.tilemap.tilemaprender")
+local RenderPipeline = require("engine.graphics.render_pipeline")
+local CameraManager = require("engine.camera.cameraManager")
+local RenderSystem = require("engine.ecs.systems.renderSystem")
+local AnimationSystem = require("engine.ecs.systems.animationSystem")
+local World = require("engine.ecs.world")
+local Components = require("engine.ecs.component")
+local MovementSystem = require("engine.ecs.systems.movementSystem")
+local PhysicsMovementSystem = require("engine.ecs.systems.physicsMovementSystem")
+local PhysicsSystem = require("engine.ecs.systems.physicsSystem")
+local PhysicsSyncSystem = require("engine.ecs.systems.physicsSyncSystem")
+local CollisionSystem = require("engine.ecs.systems.collisionSystem")
+local PhysicsDebugSystem = require("engine.ecs.systems.physicsDebugSystem")
+local PhysicsFactory = require("engine.physics.physics_factory")
 
 local PLAYER_SPEED = 100
 local JUMP_SPEED = 300
+
+local function limitAxis(position, mapSize, halfView)
+	if mapSize <= halfView * 2 then
+		return mapSize / 2
+	end
+	return math.max(halfView, math.min(position, mapSize - halfView))
+end
+
+local function followWithinMap(camera, playerX, playerY)
+	local _, _, width, height = camera:getViewport()
+	local zoom = camera:getZoom()
+	local halfWidth, halfHeight = width / (2 * zoom), height / (2 * zoom)
+	local mapWidth = mapInfo.width * mapInfo.tilewidth
+	local mapHeight = mapInfo.height * mapInfo.tileheight
+	camera:setPosition(limitAxis(playerX, mapWidth, halfWidth), limitAxis(playerY, mapHeight, halfHeight))
+end
 
 local function isGrounded(body)
 	for _, contact in ipairs(body:getContacts()) do
@@ -133,6 +149,8 @@ function Level01:onLoad()
 	local body, fixture = PhysicsFactory.create(world, entity)
 	fixture:setFriction(0)
 	body:setFixedRotation(true)
+	local transform = assert(world:getComponent(entity, Components.Transform))
+	followWithinMap(assert(self.cameraManager:getActive()), transform.x, transform.y)
 end
 
 function Level01:update(dt)
@@ -156,7 +174,8 @@ function Level01:update(dt)
 	body:setLinearVelocity(velocity.x, velocity.y)
 	self.world:update(dt)
 
-	self.cameraManager:getActive():setPosition(body:getPosition())
+	local playerX, playerY = body:getPosition()
+	followWithinMap(assert(self.cameraManager:getActive()), playerX, playerY)
 
 	local velocityX, currentVelocityY = body:getLinearVelocity()
 	local animationName

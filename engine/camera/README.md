@@ -6,7 +6,7 @@ active selection; `getActive()` returns `nil` until another camera is selected.
 Duplicate identifiers and references to missing cameras raise errors.
 
 ```lua
-local CameraManager = require("lua.engine.camera.cameraManager")
+local CameraManager = require("engine.camera.cameraManager")
 
 function Level:onLoad()
     local width, height = self.context.viewport.getViewportDimensions()

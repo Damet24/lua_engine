@@ -15,7 +15,7 @@ love = { graphics = {
 	rotate = function() end,
 } }
 
-local Adapter = require("lua.engine.camera.adapters.humpCamera")
+local Adapter = require("engine.camera.adapters.humpCamera")
 assert(not pcall(function() Adapter.new({ viewport = { width = 0, height = 100 } }) end))
 local camera = Adapter.new({ x = 20, y = 30, zoom = 2, rotation = math.pi / 2 })
 camera:setViewport({ x = 10, y = 20, width = 200, height = 100, clip = true })

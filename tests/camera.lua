@@ -11,10 +11,10 @@ for _, method in ipairs(methods) do
 	end
 end
 local config = { x = 10 }
-package.loaded["lua.engine.camera.adapters.humpCamera"] = {
+package.loaded["engine.camera.adapters.humpCamera"] = {
 	new = function(value) assert(value == config); return adapter end,
 }
-local Camera = require("lua.engine.camera.camera")
+local Camera = require("engine.camera.camera")
 local camera = Camera.new(config)
 local argumentCounts = { setPosition = 2, move = 2, setZoom = 1, setRotation = 1,
 	setViewport = 1, worldCoords = 2, cameraCoords = 2, draw = 1 }

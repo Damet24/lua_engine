@@ -1,7 +1,7 @@
-local Engine = require("lua.engine.engine")
+local Engine = require("engine.engine")
 
 local calls = {}
-package.loaded["lua.lib.shove.shove"] = {
+package.loaded["engine.lib.shove.shove"] = {
 	setResolution = function() end,
 }
 love = {

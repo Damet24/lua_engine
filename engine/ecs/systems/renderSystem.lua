@@ -1,5 +1,5 @@
-local Components = require("lua.engine.ecs.component")
-local RenderPipeline = require("lua.engine.graphics.render_pipeline")
+local Components = require("engine.ecs.component")
+local RenderPipeline = require("engine.graphics.render_pipeline")
 
 local RenderSystem = {}
 

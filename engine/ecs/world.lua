@@ -1,6 +1,6 @@
-local EventManager = require("lua.engine.core.events")
-local PhysicsWorld = require("lua.engine.physics.physics_world")
-local Components = require("lua.engine.ecs.component")
+local EventManager = require("engine.core.events")
+local PhysicsWorld = require("engine.physics.physics_world")
+local Components = require("engine.ecs.component")
 
 local World = {}
 World.__index = World

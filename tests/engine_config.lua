@@ -1,4 +1,4 @@
-local Engine = require("lua.engine.engine")
+local Engine = require("engine.engine")
 
 local engine = Engine.new({ initialScene = "menu" })
 assert(engine.config.initialScene == "menu" and engine.config.scenesPath == "game.scenes")

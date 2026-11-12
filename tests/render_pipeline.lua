@@ -1,6 +1,6 @@
-local RenderPipeline = require("lua.engine.graphics.render_pipeline")
-local RenderSystem = require("lua.engine.ecs.systems.renderSystem")
-local TilemapRender = require("lua.engine.tilemap.tilemaprender")
+local RenderPipeline = require("engine.graphics.render_pipeline")
+local RenderSystem = require("engine.ecs.systems.renderSystem")
+local TilemapRender = require("engine.tilemap.tilemaprender")
 
 local drawn = {}
 love = { graphics = {

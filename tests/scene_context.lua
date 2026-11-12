@@ -1,7 +1,7 @@
-local ResourceManager = require("lua.engine.resources.resourceManager")
-local GameContext = require("lua.engine.gameContext")
-local SceneLoader = require("lua.engine.scene.sceneLoader")
-local SceneManager = require("lua.engine.scene.sceneManager")
+local ResourceManager = require("engine.resources.resourceManager")
+local GameContext = require("engine.gameContext")
+local SceneLoader = require("engine.scene.sceneLoader")
+local SceneManager = require("engine.scene.sceneManager")
 
 local releases = 0
 local resourceManager = ResourceManager.new({ shared = { type = "test" }, pause_font = { type = "font" } }, {

@@ -1,4 +1,4 @@
-local utils = require("lua.engine.graphics.utils")
+local utils = require("engine.graphics.utils")
 local image = { getDimensions = function() return 32, 16 end }
 love = {
 	graphics = {

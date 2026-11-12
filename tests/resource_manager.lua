@@ -1,4 +1,4 @@
-local ResourceManager = require("lua.engine.resources.resourceManager")
+local ResourceManager = require("engine.resources.resourceManager")
 
 local definition = { type = "image", path = "player.png" }
 local loadCount = 0

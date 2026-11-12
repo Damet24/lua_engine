@@ -26,7 +26,7 @@ love = {
 	},
 }
 
-local Engine = require("lua.engine.engine")
+local Engine = require("engine.engine")
 local engine = Engine.new({
 	initialScene = "menu",
 	rendering = { width = 640, height = 360, pixelPerfect = false },

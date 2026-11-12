@@ -8,11 +8,14 @@ window independently. Shove handles LÖVE resize events automatically.
 `rendering.pixelPerfect = false` scales proportionally to fit the window;
 `true` uses integer scaling and nearest-neighbor filtering. In integer mode,
 a window smaller than the logical resolution clips the viewport rather than
-scaling down. Areas outside the viewport use LÖVE's background color.
+scaling down. Areas outside the viewport use LÖVE's background color, configured
+with `rendering.backgroundColor` as RGB or RGBA components between 0 and 1.
+The default is opaque black. LÖVE's normal run loop clears using this color;
+custom run loops must clear the screen themselves.
 
 Scenes can use `context.viewport.screenToViewport(x, y)` to convert screen
 coordinates into logical coordinates. It returns `inside, x, y`.
 
 Shove is a shared module, so only one engine should render at a time. The
 vendored copy includes a local-scope fix and suppresses messages when its
-optional profiler is absent. Its license is in `lua/lib/shove/LICENSE`.
+optional profiler is absent. Its license is in `engine/lib/shove/LICENSE`.

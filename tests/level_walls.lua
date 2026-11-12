@@ -17,12 +17,12 @@ love = {
 		end,
 	},
 }
-package.loaded["lua.engine.physics.physics_world"] = { new = function() return {} end }
-package.loaded["lua.engine.ecs.systems.collisionSystem"] = {}
+package.loaded["engine.physics.physics_world"] = { new = function() return {} end }
+package.loaded["engine.ecs.systems.collisionSystem"] = {}
 
 local map = require("game.maps.village")
 local Level01 = require("game.scenes.levels.level01")
-local Components = require("lua.engine.ecs.component")
+local Components = require("engine.ecs.component")
 local image = { getDimensions = function() return 32, 32 end }
 local resources = { get = function() return image end }
 local function loadLevel()

@@ -1,4 +1,4 @@
-local CameraManager = require("lua.engine.camera.cameraManager")
+local CameraManager = require("engine.camera.cameraManager")
 local manager = CameraManager.new()
 assert(manager:getActive() == nil)
 local gameplay = manager:add("gameplay", { x = 20 })

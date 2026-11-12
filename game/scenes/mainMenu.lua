@@ -1,4 +1,4 @@
-local Scene = require("lua.engine.scene.scene")
+local Scene = require("engine.scene.scene")
 
 local MainMenu = {}
 MainMenu.__index = MainMenu

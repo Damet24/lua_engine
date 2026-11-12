@@ -1,11 +1,11 @@
-local Engine = require("lua.engine.engine")
+local Engine = require("engine.engine")
 
 local resourcesDefinitions = require("game.resources.definitions")
 local resourcesLoaders = require("game.resources.loaders")
 local inputMaps = require("game.inputMaps")
 
 local engine = Engine.new({
-	initialScene = "mainMenu",
+	initialScene = "levels.level01",
 	resourceDefinitions = resourcesDefinitions,
 	resourceLoaders = resourcesLoaders,
 	inputMaps = inputMaps,
@@ -21,6 +21,7 @@ local engine = Engine.new({
 		width = 640,
 		height = 360,
 		pixelPerfect = true,
+		backgroundColor = { 0.18, 0.25, 0.34 },
 	},
 })
 

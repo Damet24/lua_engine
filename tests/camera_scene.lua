@@ -1,5 +1,5 @@
-local Scene = require("lua.engine.scene.scene")
-local CameraManager = require("lua.engine.camera.cameraManager")
+local Scene = require("engine.scene.scene")
+local CameraManager = require("engine.camera.cameraManager")
 
 local TestScene = {}
 TestScene.__index = TestScene

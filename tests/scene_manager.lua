@@ -1,4 +1,4 @@
-local SceneManager = require("lua.engine.scene.sceneManager")
+local SceneManager = require("engine.scene.sceneManager")
 
 local events = {}
 local dependencies = { marker = "injected" }

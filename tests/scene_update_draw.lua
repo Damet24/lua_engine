@@ -1,4 +1,4 @@
-local SceneManager = require("lua.engine.scene.sceneManager")
+local SceneManager = require("engine.scene.sceneManager")
 
 local scenes = {
 	Level01 = { updateBelow = false, drawBelow = false },

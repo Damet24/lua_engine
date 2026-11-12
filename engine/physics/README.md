@@ -9,11 +9,11 @@ El angulo de `Transform.rotation` se expresa en radianes.
 Registra los sistemas en este orden:
 
 ```lua
-world:addSystem(require("lua.engine.ecs.systems.movementSystem"))
-world:addSystem(require("lua.engine.ecs.systems.physicsMovementSystem"))
-world:addSystem(require("lua.engine.ecs.systems.physicsSystem"))
-world:addSystem(require("lua.engine.ecs.systems.physicsSyncSystem"))
-world:addSystem(require("lua.engine.ecs.systems.collisionSystem"))
+world:addSystem(require("engine.ecs.systems.movementSystem"))
+world:addSystem(require("engine.ecs.systems.physicsMovementSystem"))
+world:addSystem(require("engine.ecs.systems.physicsSystem"))
+world:addSystem(require("engine.ecs.systems.physicsSyncSystem"))
+world:addSystem(require("engine.ecs.systems.collisionSystem"))
 ```
 
 `world:update(dt)` actualiza los sistemas, entrega los eventos y finalmente
@@ -24,8 +24,8 @@ al final de la actualizacion, despues de los sistemas registrados.
 Para crear un cuerpo, agrega los componentes y llama a la fabrica:
 
 ```lua
-local Components = require("lua.engine.ecs.component")
-local PhysicsFactory = require("lua.engine.physics.physics_factory")
+local Components = require("engine.ecs.component")
+local PhysicsFactory = require("engine.physics.physics_factory")
 local entity = world:createEntity()
 world:addComponent(entity, Components.Transform, { x = 100, y = 100, rotation = 0 })
 world:addComponent(entity, Components.Velocity, { x = 100, y = 0 })

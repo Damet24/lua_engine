@@ -1,10 +1,10 @@
 package.path = assert(os.getenv("ENGINE_TEST_ROOT")) .. "/?.lua;" .. package.path
 
-local Scene = require("lua.engine.scene.scene")
-local SceneManager = require("lua.engine.scene.sceneManager")
-local CameraManager = require("lua.engine.camera.cameraManager")
-local RenderPipeline = require("lua.engine.graphics.render_pipeline")
-local viewport = require("lua.lib.shove.shove")
+local Scene = require("engine.scene.scene")
+local SceneManager = require("engine.scene.sceneManager")
+local CameraManager = require("engine.camera.cameraManager")
+local RenderPipeline = require("engine.graphics.render_pipeline")
+local viewport = require("engine.lib.shove.shove")
 
 local TestScene = {}
 TestScene.__index = TestScene

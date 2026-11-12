@@ -3,7 +3,7 @@ package.path = assert(os.getenv("ENGINE_TEST_ROOT")) .. "/?.lua;" .. package.pat
 rawset(love, "run", function()
 	local quads = {}
 	for index = 1, 1000 do quads[index] = index end
-	package.loaded["lua.engine.graphics.utils"] = {
+	package.loaded["engine.graphics.utils"] = {
 		loadQuads = function() return { image = "terrain", quads = quads } end,
 	}
 	love.window = { setMode = function() end }

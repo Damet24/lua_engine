@@ -1,5 +1,5 @@
-local MovementSystem = require("lua.engine.ecs.systems.movementSystem")
-local Components = require("lua.engine.ecs.component")
+local MovementSystem = require("engine.ecs.systems.movementSystem")
+local Components = require("engine.ecs.component")
 
 local entities = {
 	[1] = { Transform = { x = 0, y = 0 }, Velocity = { x = 30, y = 40 }, Movement = { maxSpeed = 25 } },

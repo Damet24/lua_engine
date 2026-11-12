@@ -1,4 +1,4 @@
-local Camera = require("lua.engine.camera.camera")
+local Camera = require("engine.camera.camera")
 
 local CameraManager = {}
 CameraManager.__index = CameraManager

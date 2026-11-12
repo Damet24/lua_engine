@@ -1,4 +1,4 @@
-local Scene = require("lua.engine.scene.scene")
+local Scene = require("engine.scene.scene")
 
 local Pause = {}
 Pause.__index = Pause

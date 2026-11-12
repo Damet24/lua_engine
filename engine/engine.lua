@@ -1,8 +1,8 @@
-local ResourceManager = require("lua.engine.resources.resourceManager")
-local GameContext = require("lua.engine.gameContext")
-local SceneLoader = require("lua.engine.scene.sceneLoader")
-local SceneManager = require("lua.engine.scene.sceneManager")
-local InputManager = require("lua.engine.input.inputManager")
+local ResourceManager = require("engine.resources.resourceManager")
+local GameContext = require("engine.gameContext")
+local SceneLoader = require("engine.scene.sceneLoader")
+local SceneManager = require("engine.scene.sceneManager")
+local InputManager = require("engine.input.inputManager")
 
 local Engine = {}
 Engine.__index = Engine
@@ -52,6 +52,7 @@ local function normalizeConfig(config)
 		width = 1280,
 		height = 720,
 		pixelPerfect = false,
+		backgroundColor = { 0, 0, 0, 1 },
 	}, "rendering")
 	return normalized
 end
@@ -86,6 +87,19 @@ local function validateConfig(config)
 	dimension(config.rendering.width, "rendering.width")
 	dimension(config.rendering.height, "rendering.height")
 	boolean(config.rendering.pixelPerfect, "rendering.pixelPerfect")
+	local color = config.rendering.backgroundColor
+	assert(type(color) == "table", "rendering.backgroundColor must be an RGB or RGBA array")
+	local count = 0
+	for index, value in pairs(color) do
+		assert(type(index) == "number" and index >= 1 and index <= 4 and index == math.floor(index),
+			"rendering.backgroundColor must be an RGB or RGBA array")
+		assert(type(value) == "number" and value >= 0 and value <= 1,
+			"rendering.backgroundColor components must be between 0 and 1")
+		count = count + 1
+	end
+	assert((count == 3 or count == 4) and color[1] ~= nil and color[2] ~= nil and color[3] ~= nil,
+		"rendering.backgroundColor must be an RGB or RGBA array")
+	config.rendering.backgroundColor = { color[1], color[2], color[3], color[4] == nil and 1 or color[4] }
 end
 
 function Engine.new(config)
@@ -143,7 +157,8 @@ function Engine:load()
 		)
 	end
 
-	self.viewport = require("lua.lib.shove.shove")
+	love.graphics.setBackgroundColor(unpack(self.rendering.backgroundColor))
+	self.viewport = require("engine.lib.shove.shove")
 	self.viewport.setResolution(self.rendering.width, self.rendering.height, {
 		fitMethod = self.rendering.pixelPerfect and "pixel" or "aspect",
 	})

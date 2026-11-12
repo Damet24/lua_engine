@@ -1,4 +1,4 @@
-local SceneManager = require("lua.engine.scene.sceneManager")
+local SceneManager = require("engine.scene.sceneManager")
 local Level01 = require("game.scenes.levels.level01")
 local Pause = require("game.scenes.pause")
 

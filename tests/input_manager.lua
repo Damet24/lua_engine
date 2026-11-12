@@ -1,4 +1,4 @@
-local InputManager = require("lua.engine.input.inputManager")
+local InputManager = require("engine.input.inputManager")
 
 local inputMaps = {
 	jump = { "a", "left", "gamepad_button_a" },

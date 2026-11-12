@@ -1,4 +1,4 @@
-local Components = require("lua.engine.ecs.component")
+local Components = require("engine.ecs.component")
 
 local AnimationSystem = {}
 

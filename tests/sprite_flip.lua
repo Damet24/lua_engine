@@ -1,4 +1,4 @@
-local RenderSystem = require("lua.engine.ecs.systems.renderSystem")
+local RenderSystem = require("engine.ecs.systems.renderSystem")
 
 local drawn
 love = { graphics = {

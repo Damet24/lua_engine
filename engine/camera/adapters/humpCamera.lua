@@ -1,4 +1,4 @@
-local HumpCamera = require("lua.lib.hump.camera")
+local HumpCamera = require("engine.lib.hump.camera")
 
 ---@class HumpCameraAdapter
 ---@field camera any

@@ -1,13 +1,13 @@
 package.path = assert(os.getenv("ENGINE_TEST_ROOT")) .. "/?.lua;" .. package.path
 
-local World = require("lua.engine.ecs.world")
-local Components = require("lua.engine.ecs.component")
-local Factory = require("lua.engine.physics.physics_factory")
-local MovementSystem = require("lua.engine.ecs.systems.movementSystem")
-local PhysicsMovementSystem = require("lua.engine.ecs.systems.physicsMovementSystem")
-local PhysicsSystem = require("lua.engine.ecs.systems.physicsSystem")
-local PhysicsSyncSystem = require("lua.engine.ecs.systems.physicsSyncSystem")
-local CollisionSystem = require("lua.engine.ecs.systems.collisionSystem")
+local World = require("engine.ecs.world")
+local Components = require("engine.ecs.component")
+local Factory = require("engine.physics.physics_factory")
+local MovementSystem = require("engine.ecs.systems.movementSystem")
+local PhysicsMovementSystem = require("engine.ecs.systems.physicsMovementSystem")
+local PhysicsSystem = require("engine.ecs.systems.physicsSystem")
+local PhysicsSyncSystem = require("engine.ecs.systems.physicsSyncSystem")
+local CollisionSystem = require("engine.ecs.systems.collisionSystem")
 
 function love.run()
 	local world = World.new(0, 640, true)
