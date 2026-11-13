@@ -56,6 +56,11 @@ local function normalizeConfig(config)
 		pixelPerfect = false,
 		backgroundColor = { 0, 0, 0, 1 },
 	}, "rendering")
+	normalized.audio = withDefaults(normalized.audio, {
+		masterVolume = 1.0,
+		musicVolume = 1.0,
+		sfxVolume = 1.0,
+	}, "audio")
 	return normalized
 end
 

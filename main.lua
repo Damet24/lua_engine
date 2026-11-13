@@ -27,11 +27,7 @@ local engine = Engine.new({
         backgroundColor = { 0.18, 0.25, 0.34 },
     },
 
-    audio = {
-        masterVolume = 0.1,
-        musicVolume = 0.8,
-        sfxVolume = 1.0,
-    }
+
 })
 
 function love.load()
