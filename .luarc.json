@@ -7,5 +7,11 @@
   "workspace.checkThirdParty": "Apply",
   "workspace.library": ["${3rd}/love2d/library",
         "${3rd}/luaecs/library"],
-  "diagnostics.globals": ["love"]
+  "diagnostics.globals": ["love"],
+  "diagnostics.neededFileStatus": {
+    "duplicate-index": "Any!"
+  },
+  "diagnostics.severity": {
+    "duplicate-index": "Error!"
+  }
 }

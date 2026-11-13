@@ -1,0 +1,86 @@
+{
+    "activeFile": "tiled/maps/vIllage.tmx",
+    "expandedProjectPaths": [
+        "tiled/maps",
+        "tiled",
+        "tiled/tilesets",
+        "assets",
+        "."
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "#Terrain (16x16)": {
+            "scaleInDock": 1
+        },
+        "tiled/maps/main": {
+            "scale": 2,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 202.75,
+                "y": 228.25
+            }
+        },
+        "tiled/maps/main#Terrain (16x16)": {
+            "scaleInDock": 1
+        },
+        "tiled/maps/main.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 266.66666666666663,
+                "y": 123.66666666666663
+            }
+        },
+        "tiled/maps/main.tmx#Terrain (16x16)": {
+            "scaleInDock": 1
+        },
+        "tiled/maps/vIllage.tmx": {
+            "scale": 1,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 455.5,
+                "y": 259
+            }
+        },
+        "tiled/maps/vallage.tmx": {
+            "scale": 2,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 251.25,
+                "y": 116.75
+            }
+        },
+        "tiled/tilesets/Terrain (16x16).tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.exportedFilePath": "/home/damet/Develop/engine_test/game/maps",
+    "last.imagePath": "/home/damet/Develop/engine_test/game/assets/images/Terrain",
+    "map.height": 23,
+    "map.lastUsedExportFilter": "Lua files (*.lua)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "openFiles": [
+        "tiled/tilesets/Terrain (16x16).tsx",
+        "tiled/maps/vIllage.tmx"
+    ],
+    "project": "main.tiled-project",
+    "recentFiles": [
+        "tiled/tilesets/Terrain (16x16).tsx",
+        "tiled/maps/vIllage.tmx",
+        "tiled/maps/vallage.tmx",
+        "tiled/maps/main.tmx",
+        "tiled/maps/main"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}

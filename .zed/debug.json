@@ -1,0 +1,10 @@
+[
+  {
+    "label": "Debug LÖVE",
+    "adapter": "CodeLLDB",
+    "request": "launch",
+    "program": "/home/damet/.local/bin/love-11.5-x86_64.AppImage",
+    "args": ["."],
+    "cwd": "/home/damet/Develop/engine_test"
+  }
+]
