@@ -1,5 +1,5 @@
 local ResourceManager = require("engine.resources.resourceManager")
-local GameContext = require("engine.gameContext")
+local GameContext = require("engine.core.gameContext")
 local SceneLoader = require("engine.scene.sceneLoader")
 local SceneManager = require("engine.scene.sceneManager")
 local AudioManager = require ("engine.audio.audioManager")
@@ -126,8 +126,16 @@ function Engine.new(config)
 
     self.resourceManager = ResourceManager.new(config.resourceDefinitions, config.resourceLoaders)
 
+	self.audioManager = AudioManager.new({
+        resourceManager = self.resourceManager,
+        masterVolume = config.audio.masterVolume,
+        musicVolume = config.audio.musicVolume,
+        sfxVolume = config.audio.sfxVolume,
+    })
+
 	self.context = GameContext.new({
-        resourceManager = self.resourceManager
+        resourceManager = self.resourceManager,
+        audioManager = self.audioManager,
 	})
 
 	self.sceneLoader = SceneLoader.new({
@@ -136,18 +144,9 @@ function Engine.new(config)
 	})
 
 	self.sceneManager = SceneManager.new(self.sceneLoader)
-
-	self.audioManager = AudioManager.new({
-        resourceManager = self.resourceManager,
-        masterVolume = config.audio.masterVolume,
-        musicVolume = config.audio.musicVolume,
-        sfxVolume = config.audio.sfxVolume,
-    })
-	self.context.audioManager = self.audioManager
+	self.context.sceneManager = self.sceneManager
 
 	self.inputManager = InputManager.new(config.inputMaps)
-
-	self.context.sceneManager = self.sceneManager
 	self.context.inputManager = self.inputManager
 
 	self.loaded = false

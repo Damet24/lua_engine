@@ -10,11 +10,19 @@ rawset(love, "run", function()
 		return newImage(love.filesystem.newFileData(data, path))
 	end)
 	local ResourceManager = require("engine.resources.resourceManager")
-	local GameContext = require("engine.gameContext")
+	local GameContext = require("engine.core.gameContext")
 	local SceneLoader = require("engine.scene.sceneLoader")
 	local SceneManager = require("engine.scene.sceneManager")
 	local resources = ResourceManager.new(require("game.resources.definitions"), require("game.resources.loaders"))
-	local context = GameContext.new({ resourceManager = resources })
+	local context = GameContext.new({
+		resourceManager = resources,
+		audioManager = {
+			playMusic = function() end,
+			playSound = function() return 0 end,
+			update = function() end,
+			shutdown = function() end,
+		},
+	})
 	context.viewport = { getViewportDimensions = function() return 400, 300 end }
 	context.inputManager = { isDown = function() return false end, isJustPressed = function() return false end }
 	local manager = SceneManager.new(SceneLoader.new({ context = context }))

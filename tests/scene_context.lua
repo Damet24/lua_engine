@@ -1,5 +1,5 @@
 local ResourceManager = require("engine.resources.resourceManager")
-local GameContext = require("engine.gameContext")
+local GameContext = require("engine.core.gameContext")
 local SceneLoader = require("engine.scene.sceneLoader")
 local SceneManager = require("engine.scene.sceneManager")
 
@@ -11,10 +11,23 @@ local resourceManager = ResourceManager.new({ shared = { type = "test" }, pause_
 	},
 	font = { load = function() return {} end, release = function() end },
 })
-local context = GameContext.new({ resourceManager = resourceManager })
+local context = GameContext.new({
+	resourceManager = resourceManager,
+	audioManager = {
+		playMusic = function() end,
+		playSound = function() return 0 end,
+		update = function() end,
+		shutdown = function() end,
+	},
+})
 local loader = SceneLoader.new({ context = context })
 local manager = SceneManager.new(loader)
 context.sceneManager = manager
+context.inputManager = {
+	isDown = function() return false end,
+	isJustPressed = function() return false end,
+	isJustReleased = function() return false end,
+}
 
 love = {
 	keyboard = { isDown = function() return false end },
