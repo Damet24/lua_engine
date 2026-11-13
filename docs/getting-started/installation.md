@@ -138,7 +138,7 @@ identifier of a scene that already exists in your project.
 | --- | --- |
 | `initialScene` | Required. Identifier of the first scene to load. |
 | `inputMaps` | Required. Table of action names and their key bindings. It may be empty, but the table must exist. |
-| `audio` | Required at construction time. Provide `masterVolume`, `musicVolume`, and `sfxVolume`. |
+| `audio` | Optional. `masterVolume`, `musicVolume`, and `sfxVolume` each default to `1.0`. |
 | `scenesPath` | Prefix used to import scenes. Defaults to `game.scenes`. |
 | `resourceDefinitions` | Resource id-to-definition table. Defaults to an empty table. |
 | `resourceLoaders` | Loader table. Defaults to the built-in image, sound, and font loaders. |
