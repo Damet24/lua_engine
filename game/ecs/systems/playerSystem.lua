@@ -21,7 +21,7 @@ end
 
 local PlayerSystem = {}
 
-function PlayerSystem.new(input, entity)
+function PlayerSystem.new(input, entity, audio)
 	local jumpCount = 0
 	return {
 		update = function(world, dt)
@@ -42,7 +42,8 @@ function PlayerSystem.new(input, entity)
 
 			if input:isJustPressed("jump") and jumpCount < MAX_JUMP then
 				velocityY = -JUMP_SPEED
-				jumpCount = jumpCount + 1
+                jumpCount = jumpCount + 1
+                audio:playSound("jump")
 			end
 			velocity.x, velocity.y = direction * PLAYER_SPEED, velocityY
 			body:setLinearVelocity(velocity.x, velocity.y)

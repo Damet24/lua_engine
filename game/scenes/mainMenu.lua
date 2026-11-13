@@ -5,41 +5,41 @@ MainMenu.__index = MainMenu
 setmetatable(MainMenu, { __index = Scene })
 
 function MainMenu.new(context)
-	local self = Scene.new()
+    local self = Scene.new()
 
-	setmetatable(self, MainMenu)
+    setmetatable(self, MainMenu)
 
-	self.context = context
+    self.context = context
 
-	return self
+    return self
 end
 
 function MainMenu:onLoad()
-	print("Loading MainMenu")
-	self.context.resourceManager:get(self, "terrain")
+    print("Loading MainMenu")
+    self.context.audioManager:playMusic("music", { loop = true })
 end
 
 function MainMenu:onEnter()
-	print("main menu enter")
+    print("main menu enter")
 end
 
 function MainMenu:update(dt)
-	-- Actualizar el menú
-	if self.context.inputManager:isJustPressed("accept") then
-		self.context.sceneManager:replace("levels.level01")
-	end
+    -- Actualizar el menú
+    if self.context.inputManager:isJustPressed("accept") then
+        self.context.sceneManager:replace("levels.level01")
+    end
 
-	-- if love.keyboard.isDown("space") then
-	-- 		self.manager:pop()
-	-- end
+    -- if love.keyboard.isDown("space") then
+    -- 		self.manager:pop()
+    -- end
 end
 
 function MainMenu:onDestroy()
-	self.context.resourceManager:releaseAll(self)
+    self.context.resourceManager:releaseAll(self)
 end
 
 function MainMenu:draw()
-	-- Dibujar el menú
+    -- Dibujar el menú
 end
 
 return MainMenu

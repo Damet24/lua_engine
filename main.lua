@@ -1,25 +1,23 @@
 local Engine = require("engine.engine")
 
 local resourcesDefinitions = require("game.resources.definitions")
-local resourcesLoaders = require("game.resources.loaders")
 local inputMaps = require("game.inputMaps")
 
 local engine = Engine.new({
 	initialScene = "levels.level01",
 	resourceDefinitions = resourcesDefinitions,
-	resourceLoaders = resourcesLoaders,
 	inputMaps = inputMaps,
 	window = {
-		width = 1280,
-		height = 720,
+		width = 256*3,
+		height = 240*3,
 		fullscreen = false,
 		resizable = false,
 		vsync = true,
 	},
 
 	rendering = {
-		width = 640,
-		height = 360,
+		width = 256,
+		height = 240,
 		pixelPerfect = true,
 		backgroundColor = { 0.18, 0.25, 0.34 },
 	},

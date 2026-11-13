@@ -9,6 +9,10 @@ function GameContext.new(services)
             services.resourceManager,
             "resourceManager is required"
         ),
+        audioManager = assert(
+            services.audioManager,
+            "audioManager is required"
+        ),
         sceneManager = services.sceneManager,
     }, GameContext)
 end

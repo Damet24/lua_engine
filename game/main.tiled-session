@@ -2,8 +2,8 @@
     "activeFile": "tiled/maps/vIllage.tmx",
     "expandedProjectPaths": [
         "tiled/maps",
-        "tiled/tilesets",
         "tiled",
+        "tiled/tilesets",
         "assets",
         "."
     ],
@@ -41,8 +41,8 @@
             "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 252,
-                "y": 218.5
+                "x": 455.5,
+                "y": 259
             }
         },
         "tiled/maps/vallage.tmx": {
@@ -52,10 +52,15 @@
                 "x": 251.25,
                 "y": 116.75
             }
+        },
+        "tiled/tilesets/Terrain (16x16).tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         }
     },
     "last.exportedFilePath": "/home/damet/Develop/engine_test/game/maps",
     "last.imagePath": "/home/damet/Develop/engine_test/game/assets/images/Terrain",
+    "map.height": 23,
     "map.lastUsedExportFilter": "Lua files (*.lua)",
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 16,
@@ -66,6 +71,8 @@
     ],
     "project": "main.tiled-project",
     "recentFiles": [
+        "tiled/tilesets/Terrain (16x16).tsx",
+        "tiled/maps/vIllage.tmx",
         "tiled/maps/vallage.tmx",
         "tiled/maps/main.tmx",
         "tiled/maps/main"

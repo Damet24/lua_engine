@@ -12,7 +12,6 @@ function Pause.new(context)
 	setmetatable(self, Pause)
 	self.context = context
 	self.drawBelow = true
-	self.escapeDown = true
 	return self
 end
 
@@ -21,11 +20,9 @@ function Pause:onLoad()
 end
 
 function Pause:update(dt)
-	local escapeDown = love.keyboard.isDown("escape")
-	if escapeDown and not self.escapeDown then
+	if self.context.inputManager:isJustPressed("exit") then
 		self.context.sceneManager:pop()
 	end
-	self.escapeDown = escapeDown
 end
 
 function Pause:onDestroy()

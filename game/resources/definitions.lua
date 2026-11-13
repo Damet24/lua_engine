@@ -35,21 +35,26 @@ local definitions = {
 		type = "font",
 		size = 18,
 	},
-	background_blue = {
-		type = "image",
-		path = "game/assets/images/Background/Blue.png",
-	},
-	background_yellow = {
-		type = "image",
-		path = "game/assets/images/Background/Yellow.png",
+
+    music = {
+        type = "sound",
+        soundType = "stream",
+        path = "game/assets/music/time_for_adventure.mp3"
 	}
 }
 
 local function addImages(directory, images)
-	for id, filename in pairs(images) do
-		assert(not definitions[id], "duplicate resource id: " .. id)
-		definitions[id] = { type = "image", path = "game/assets/images/" .. directory .. filename }
-	end
+    for id, filename in pairs(images) do
+        assert(not definitions[id], "duplicate resource id: " .. id)
+        definitions[id] = { type = "image", path = "game/assets/images/" .. directory .. filename }
+    end
+end
+
+local function addSound(directory, sound, soundType)
+    for id, filename in pairs(sound) do
+        assert(not definitions[id], "duplicate resource id: " .. id)
+        definitions[id] = { type = "sound", path = "game/assets/sounds/" .. directory .. filename, soundType = soundType }
+    end
 end
 
 addImages("", {
@@ -62,7 +67,10 @@ addImages("Background/", {
 	background_gray = "Gray.png",
 	background_green = "Green.png",
 	background_pink = "Pink.png",
-	background_purple = "Purple.png",
+    background_purple = "Purple.png",
+    background_yellow = "Yellow.png",
+    background_blue = "Blue.png"
+
 })
 
 addImages("Items/Boxes/", {
@@ -161,5 +169,14 @@ addImages("Traps/", {
 	trap_spikes_idle = "Spikes/Idle.png", trap_trampoline_idle = "Trampoline/Idle.png",
 	trap_trampoline_jump = "Trampoline/Jump (28x28).png",
 })
+
+addSound("", {
+    coin = "coin.wav",
+    explosion = "explosion.wav",
+    hurt = "hurt.wav",
+    jump = "jump.wav",
+    power_up = "power_up.wav",
+    tap = "tap.wav"
+}, "static")
 
 return definitions

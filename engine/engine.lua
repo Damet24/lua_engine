@@ -2,7 +2,9 @@ local ResourceManager = require("engine.resources.resourceManager")
 local GameContext = require("engine.gameContext")
 local SceneLoader = require("engine.scene.sceneLoader")
 local SceneManager = require("engine.scene.sceneManager")
+local AudioManager = require ("engine.audio.audioManager")
 local InputManager = require("engine.input.inputManager")
+local loaders = require "engine.resources.loaders.loaders"
 
 local Engine = {}
 Engine.__index = Engine
@@ -39,7 +41,7 @@ local function normalizeConfig(config)
 		normalized.resourceDefinitions = {}
 	end
 	if normalized.resourceLoaders == nil then
-		normalized.resourceLoaders = {}
+		normalized.resourceLoaders = loaders
 	end
 	if normalized.window ~= nil then
 		normalized.window = withDefaults(normalized.window, {
@@ -117,10 +119,10 @@ function Engine.new(config)
 	self.window = config.window
 	self.rendering = config.rendering
 
-	self.resourceManager = ResourceManager.new(config.resourceDefinitions, config.resourceLoaders)
+    self.resourceManager = ResourceManager.new(config.resourceDefinitions, config.resourceLoaders)
 
 	self.context = GameContext.new({
-		resourceManager = self.resourceManager,
+        resourceManager = self.resourceManager
 	})
 
 	self.sceneLoader = SceneLoader.new({
@@ -129,6 +131,11 @@ function Engine.new(config)
 	})
 
 	self.sceneManager = SceneManager.new(self.sceneLoader)
+
+	self.audioManager = AudioManager.new({
+        resourceManager = self.resourceManager
+    })
+	self.context.audioManager = self.audioManager
 
 	self.inputManager = InputManager.new(config.inputMaps)
 
@@ -171,12 +178,13 @@ function Engine:load()
 end
 
 function Engine:update(dt)
-	if not self.loaded or self.closed then
-		return
-	end
+    if not self.loaded or self.closed then
+        return
+    end
 
-	self.sceneManager:update(dt)
-	self.inputManager:update()
+    self.sceneManager:update(dt)
+    self.audioManager:update(dt)
+    self.inputManager:update()
 end
 
 function Engine:draw()
