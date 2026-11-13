@@ -4,7 +4,7 @@ local SceneLoader = require("engine.scene.sceneLoader")
 local SceneManager = require("engine.scene.sceneManager")
 local AudioManager = require ("engine.audio.audioManager")
 local InputManager = require("engine.input.inputManager")
-local loaders = require "engine.resources.loaders.loaders"
+local loaders = require("engine.resources.loaders.loaders")
 
 local Engine = {}
 Engine.__index = Engine
