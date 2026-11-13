@@ -133,7 +133,10 @@ function Engine.new(config)
 	self.sceneManager = SceneManager.new(self.sceneLoader)
 
 	self.audioManager = AudioManager.new({
-        resourceManager = self.resourceManager
+        resourceManager = self.resourceManager,
+        masterVolume = config.audio.masterVolume,
+        musicVolume = config.audio.musicVolume,
+        sfxVolume = config.audio.sfxVolume,
     })
 	self.context.audioManager = self.audioManager
 
@@ -203,10 +206,9 @@ function Engine:quit()
 	end
 
 	self.sceneManager:clear()
-	self.sceneManager:processPendingOperations()
-
+    self.sceneManager:processPendingOperations()
+    self.audioManager:shutdown()
 	self.resourceManager:releaseAllResources()
-
 	self.closed = true
 end
 

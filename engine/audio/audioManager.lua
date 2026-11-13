@@ -10,9 +10,9 @@ function AudioManager.new(config)
 
     self.resourceManager = config.resourceManager
 
-    self.masterVolume = config.masterVolume or 1.0
-    self.musicVolume = config.musicVolume or 0.8
-    self.sfxVolume = config.sfxVolume or 1.0
+    self.masterVolume = config.masterVolume
+    self.musicVolume = config.musicVolume
+    self.sfxVolume = config.sfxVolume
 
     self.currentMusic = nil
     self.activeSounds = {}
@@ -148,6 +148,18 @@ function AudioManager:update(dt)
             self.activeSounds[soundId] = nil
         end
     end
+end
+
+function AudioManager:shutdown()
+    self:stopMusic()
+
+    for soundId, sound in pairs(self.activeSounds) do
+        sound.source:stop()
+        sound.source:release()
+        self.activeSounds[soundId] = nil
+    end
+
+    self.resourceManager:releaseAll(self)
 end
 
 return AudioManager
